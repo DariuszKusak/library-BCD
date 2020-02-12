@@ -1,4 +1,4 @@
-package com.bcd.library.librarybcd;
+package com.library.bcd.librarybcd;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

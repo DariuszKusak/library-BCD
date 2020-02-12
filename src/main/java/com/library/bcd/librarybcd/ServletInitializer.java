@@ -1,4 +1,4 @@
-package com.bcd.library.librarybcd;
+package com.library.bcd.librarybcd;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

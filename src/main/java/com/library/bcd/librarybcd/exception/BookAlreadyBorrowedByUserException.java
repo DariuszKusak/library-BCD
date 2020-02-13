@@ -1,15 +1,15 @@
 package com.library.bcd.librarybcd.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import com.library.bcd.librarybcd.entity.Book;
+import com.library.bcd.librarybcd.entity.User;
 
-@ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY, reason = "Book already borrowed")
 public class BookAlreadyBorrowedByUserException extends Exception {
 
-    private static final long UID = 11111L;
+    private static final long UID = 4441L;
 
-    public BookAlreadyBorrowedByUserException(int userId, int bookId) {
-        super(String.format("Book: %d already borrowed by user %d", bookId, userId));
+    public BookAlreadyBorrowedByUserException(Book book, User user) {
+        super(String.format("Book(%d): %s has been already borrowed by user(%d): %s",
+                book.getId(), book.getTitle(), user.getId(), user.getLogin()));
     }
 
 }

@@ -1,6 +1,7 @@
 package com.library.bcd.librarybcd.service;
 
 import com.library.bcd.librarybcd.entity.User;
+import com.library.bcd.librarybcd.exception.UserWithPasswordDoesNotExists;
 import com.library.bcd.librarybcd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User authorizeUser(String login, String password) {
+    public User authorizeUser(String login, String password) throws UserWithPasswordDoesNotExists {
         return userRepository.findByLoginAndPassword(login, password)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("User: %s with password: %s does not exist.", login, password)));
+                .orElseThrow(() -> new UserWithPasswordDoesNotExists(login, password));
     }
 }

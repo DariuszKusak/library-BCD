@@ -1,6 +1,7 @@
 package com.library.bcd.librarybcd.controller;
 
 import com.library.bcd.librarybcd.entity.User;
+import com.library.bcd.librarybcd.exception.UserWithPasswordDoesNotExists;
 import com.library.bcd.librarybcd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/authorize/user/{login}/password/{password}")
-    public ResponseEntity<User> authorize(@PathVariable String login, @PathVariable String password) {
+    public ResponseEntity<User> authorize(@PathVariable String login, @PathVariable String password) throws UserWithPasswordDoesNotExists {
         User authorizedUser = userService.authorizeUser(login, password);
         return new ResponseEntity<>(authorizedUser, HttpStatus.OK);
     }

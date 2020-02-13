@@ -2,8 +2,10 @@ package com.library.bcd.librarybcd.controller;
 
 import com.library.bcd.librarybcd.entity.Book;
 import com.library.bcd.librarybcd.entity.User;
+import com.library.bcd.librarybcd.exception.UserWithPasswordDoesNotExists;
 import com.library.bcd.librarybcd.service.User2BookService;
 import com.library.bcd.librarybcd.service.UserService;
+import com.library.bcd.librarybcd.utils.TmpUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +29,8 @@ public class User2BookController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Book>> getAllUserBooks() {
-        User user = userService.authorizeUser("d_user", "123");
+    public ResponseEntity<List<Book>> getAllUserBooks() throws UserWithPasswordDoesNotExists {
+        User user = TmpUser.getTmpUser();
         List<Book> user2Books = user2BookService.getBooksForUser(user);
         return new ResponseEntity<>(user2Books, HttpStatus.OK);
     }

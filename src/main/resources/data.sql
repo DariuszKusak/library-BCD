@@ -19,3 +19,7 @@ INSERT INTO book (id, title, author, description, image_url, available, genre, y
 'https://www.ravelo.pl/pub/mm/img/220/100492966.jpg', 1, 'naukowa', 2013, 4),
 (10, 'Anna Karenina', 'Tołstoj Lew', 'Trudno pisać recenzję książki, która należy do klasyki światowej literatury i została uznana za arcydzieło, a fakt, że nie jestem wielkim znawcą XIX-wiecznej rosyjskiej prozy, odrobinę onieśmiela przy formułowaniu opinii i ocen, zwłaszcza tych krytycznych. Czuję jednak potrzebę, aby podzielić się moimi wrażeniami po przeczytaniu powieści. Wrażeniami, które w żadnym stopniu nie będą się opierać na dokonywanych przez dziesiątki lat analizach, krytykach, interpretacjach. Będzie to czysto subiektywna opinia człowieka, który lubi czytać.',
  'https://www.ravelo.pl/pub/mm/img/220/100163875.jpg', 1, 'romans', 1889, 8);
+
+INSERT INTO user (id, login, password, role) VALUES
+(1, 'd_user', '123', 'USER'),
+(2, 'd_admin', '456', 'ADMIN');

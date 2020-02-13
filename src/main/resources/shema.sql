@@ -11,7 +11,3 @@ CREATE TABLE book (
   year INT,
   amount INT
 );
-
-
-
-INSERT INTO book (id, title, author, description, image_url, available, genre, year, amount) VALUES

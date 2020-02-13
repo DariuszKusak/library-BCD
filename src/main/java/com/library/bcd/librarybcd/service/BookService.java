@@ -64,10 +64,9 @@ public class BookService {
 
     private void checkIfUserCanBorrowMoreBooks(User user) throws BookLimitException {
         List<User2Book> user2Books = user2BookRepository.findAllByUser(user);
-        if (user2Books.size() > BOOKS_LIMIT) {
+        if (user2Books.size() >= BOOKS_LIMIT) {
             throw new BookLimitException(BOOKS_LIMIT);
         }
-
     }
 
 }

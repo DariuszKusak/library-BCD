@@ -26,6 +26,7 @@ public class Book {
     @Column(name = "author")
     private String author;
 
+    @Lob
     @Column(name = "description")
     private String description;
 

@@ -8,10 +8,12 @@ import com.library.bcd.librarybcd.repository.User2BookRepository;
 import com.library.bcd.librarybcd.utils.TmpUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional
 @Service
 public class User2BookService {
 
@@ -47,6 +49,10 @@ public class User2BookService {
         if (user2Books.size() != 0) {
             throw new BookAlreadyBorrowedByUserException(book, TmpUser.getTmpUser());
         }
+    }
+
+    public void returnBook(User user, Book book) {
+        user2BookRepository.deleteByUserAndBook(user, book);
     }
 
 }

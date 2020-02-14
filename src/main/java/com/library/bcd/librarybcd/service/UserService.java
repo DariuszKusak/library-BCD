@@ -26,4 +26,14 @@ public class UserService {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
+
+    public User updateUser(User user) throws UserWithPasswordDoesNotExists {
+        User updatedUser = authorizeUser(user.getLogin(), user.getPassword());
+        updatedUser.setId(user.getId());
+        updatedUser.setLogin(user.getLogin());
+        updatedUser.setPassword(user.getPassword());
+        updatedUser.setRole(user.getRole());
+        userRepository.saveAndFlush(updatedUser);
+        return updatedUser;
+    }
 }

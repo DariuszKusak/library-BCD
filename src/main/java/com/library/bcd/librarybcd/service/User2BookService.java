@@ -4,6 +4,7 @@ import com.library.bcd.librarybcd.entity.Book;
 import com.library.bcd.librarybcd.entity.User;
 import com.library.bcd.librarybcd.entity.User2Book;
 import com.library.bcd.librarybcd.exception.BookAlreadyBorrowedByUserException;
+import com.library.bcd.librarybcd.repository.BookRepository;
 import com.library.bcd.librarybcd.repository.User2BookRepository;
 import com.library.bcd.librarybcd.utils.TmpUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,12 @@ import java.util.List;
 public class User2BookService {
 
     private final User2BookRepository user2BookRepository;
+    private final BookRepository bookRepository;
 
     @Autowired
-    public User2BookService(User2BookRepository user2BookRepository) {
+    public User2BookService(User2BookRepository user2BookRepository, BookRepository bookRepository) {
         this.user2BookRepository = user2BookRepository;
+        this.bookRepository = bookRepository;
 
     }
 
@@ -53,6 +56,9 @@ public class User2BookService {
 
     public void returnBook(User user, Book book) {
         user2BookRepository.deleteByUserAndBook(user, book);
+        book.setAmount(book.getAmount() + 1);
+        book.setAvailable(true);
+        bookRepository.save(book);
     }
 
 }

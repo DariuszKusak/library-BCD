@@ -10,16 +10,10 @@ import com.library.bcd.librarybcd.exception.UserWithPasswordDoesNotExists;
 import com.library.bcd.librarybcd.service.BookService;
 import com.library.bcd.librarybcd.service.User2BookService;
 import com.library.bcd.librarybcd.service.UserService;
-import com.library.bcd.librarybcd.utils.TmpUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -58,10 +52,10 @@ public class BookController {
 
     @PutMapping("/{bookId}/{login}/{password}")
     public ResponseEntity<Book> borrowBook(@PathVariable int bookId, @PathVariable String login, @PathVariable String password) throws BookAlreadyBorrowedByUserException, BookNotFoundException, UserWithPasswordDoesNotExists, BookLimitException {
-        User user = TmpUser.getTmpUser();
+        User user = userService.authorizeUser(login, password);
         Book book = bookService.getBookById(bookId);
         user2BookService.checkIfBookDoNotDuplicate(user, book);
-        Book borrowedBook = bookService.borrowBook(book);
+        Book borrowedBook = bookService.borrowBook(book, user);
         User2Book u2b = user2BookService.borrowUser4Book(user, borrowedBook);
         bookService.saveBook(borrowedBook);
         user2BookService.saveU2B(u2b);

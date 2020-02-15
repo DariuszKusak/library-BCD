@@ -8,12 +8,13 @@ import com.library.bcd.librarybcd.exception.BookLimitException;
 import com.library.bcd.librarybcd.exception.BookNotFoundException;
 import com.library.bcd.librarybcd.repository.BookRepository;
 import com.library.bcd.librarybcd.repository.User2BookRepository;
-import com.library.bcd.librarybcd.utils.TmpUser;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 public class BookService {
 
@@ -42,9 +43,9 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    public Book borrowBook(Book book) throws BookAlreadyBorrowedByUserException, BookLimitException {
-        checkIfUserCanBorrowMoreBooks(TmpUser.getTmpUser());
-        checkIfBookIsAvailable(book);
+    public Book borrowBook(Book book, User user) throws BookAlreadyBorrowedByUserException, BookLimitException {
+        checkIfUserCanBorrowMoreBooks(user);
+        checkIfBookIsAvailable(book, user);
         book.setAmount(book.getAmount() - 1);
         if (book.getAmount() < 1) book.setAvailable(false);
         bookRepository.save(book);
@@ -55,9 +56,9 @@ public class BookService {
         bookRepository.save(book);
     }
 
-    private Book checkIfBookIsAvailable(Book book) throws BookAlreadyBorrowedByUserException {
+    private Book checkIfBookIsAvailable(Book book, User user) throws BookAlreadyBorrowedByUserException {
         if (book.getAmount() < 1 || !book.isAvailable()) {
-            throw new BookAlreadyBorrowedByUserException(book, TmpUser.getTmpUser());
+            throw new BookAlreadyBorrowedByUserException(book, user);
         }
         return book;
     }

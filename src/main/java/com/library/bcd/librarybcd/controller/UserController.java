@@ -2,17 +2,12 @@ package com.library.bcd.librarybcd.controller;
 
 import com.library.bcd.librarybcd.entity.User;
 import com.library.bcd.librarybcd.exception.UserWithPasswordDoesNotExists;
+import com.library.bcd.librarybcd.service.User2BookService;
 import com.library.bcd.librarybcd.service.UserService;
-import com.library.bcd.librarybcd.utils.TmpUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,15 +16,17 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+    private User2BookService user2BookService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, User2BookService user2BookService) {
         this.userService = userService;
+        this.user2BookService = user2BookService;
     }
 
     @GetMapping("/authorize/user/{login}/password/{password}")
     public ResponseEntity<User> authorize(@PathVariable String login, @PathVariable String password) throws UserWithPasswordDoesNotExists {
-        User authorizedUser = TmpUser.getTmpUser();
+        User authorizedUser = userService.authorizeUser(login, password);
         return new ResponseEntity<>(authorizedUser, HttpStatus.OK);
     }
 
@@ -41,9 +38,10 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<User> updateUser(@RequestBody User user) throws UserWithPasswordDoesNotExists {
-        System.out.println(user);
-        User updateUser = userService.updateUser(user);
-        return new ResponseEntity<>(updateUser, HttpStatus.OK);
+        User oldUser = userService.findById(user.getId());
+        User updatedUser = userService.updateUser(user);
+        user2BookService.updateUser2Books(oldUser, updatedUser);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
 }

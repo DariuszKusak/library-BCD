@@ -3,7 +3,6 @@ package com.library.bcd.librarybcd.service;
 import com.library.bcd.librarybcd.entity.Book;
 import com.library.bcd.librarybcd.entity.User;
 import com.library.bcd.librarybcd.entity.User2Book;
-import com.library.bcd.librarybcd.exception.BookAlreadyBorrowedByUserException;
 import com.library.bcd.librarybcd.repository.BookRepository;
 import com.library.bcd.librarybcd.repository.User2BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +23,6 @@ public class User2BookService {
     public User2BookService(User2BookRepository user2BookRepository, BookRepository bookRepository) {
         this.user2BookRepository = user2BookRepository;
         this.bookRepository = bookRepository;
-
-    }
-
-    public User2Book borrowUser4Book(User user, Book book) {
-        User2Book u2b = new User2Book(0, book, user);
-        saveU2B(u2b);
-        return u2b;
-    }
-
-    public void saveU2B(User2Book u2b) {
-        user2BookRepository.save(u2b);
     }
 
     public List<Book> getBooksForUser(User user) {
@@ -46,10 +34,17 @@ public class User2BookService {
         return books;
     }
 
-    public void checkIfBookDoNotDuplicate(User user, Book book) throws BookAlreadyBorrowedByUserException {
-        List<User2Book> user2Books = user2BookRepository.findAllByUserAndBook(user, book);
-        if (user2Books.size() != 0) {
-            throw new BookAlreadyBorrowedByUserException(book, user);
+    public User2Book borrowBookForUser(User user, Book book) {
+        User2Book u2b = new User2Book(0, book, user);
+        user2BookRepository.saveAndFlush(u2b);
+        return u2b;
+    }
+
+    public void updateUser2Books(User oldUser, User updatedUser) {
+        List<User2Book> allByUser = user2BookRepository.findAllByUser(oldUser);
+        for (User2Book u2b : allByUser) {
+            u2b.setUser(updatedUser);
+            user2BookRepository.saveAndFlush(u2b);
         }
     }
 
@@ -58,18 +53,6 @@ public class User2BookService {
         book.setAmount(book.getAmount() + 1);
         book.setAvailable(true);
         bookRepository.save(book);
-    }
-
-    public void updateUser2Books(User oldUser, User updatedUser) {
-
-        List<User2Book> allByUser = user2BookRepository.findAllByUser(oldUser);
-        System.out.println(allByUser);
-        for (User2Book u2b : allByUser) {
-            u2b.setUser(updatedUser);
-            user2BookRepository.saveAndFlush(u2b);
-        }
-
-        System.out.println(user2BookRepository.findAll());
     }
 
 }

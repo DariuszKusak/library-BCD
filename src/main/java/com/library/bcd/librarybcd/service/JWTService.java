@@ -3,6 +3,8 @@ package com.library.bcd.librarybcd.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +15,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Map;
 
 
 @Service
@@ -46,6 +49,5 @@ public class JWTService {
                 .getPayload();
         return new String(Base64.getDecoder().decode(encodedPayload));
     }
-
 
 }

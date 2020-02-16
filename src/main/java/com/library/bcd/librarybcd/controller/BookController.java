@@ -6,7 +6,7 @@ import com.library.bcd.librarybcd.entity.User2Book;
 import com.library.bcd.librarybcd.exception.BookAlreadyBorrowedByUserException;
 import com.library.bcd.librarybcd.exception.BookLimitException;
 import com.library.bcd.librarybcd.exception.BookNotFoundException;
-import com.library.bcd.librarybcd.exception.UserWithPasswordDoesNotExists;
+import com.library.bcd.librarybcd.exception.UserNotFoundException;
 import com.library.bcd.librarybcd.service.BookService;
 import com.library.bcd.librarybcd.service.User2BookService;
 import com.library.bcd.librarybcd.service.UserService;
@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -40,19 +41,16 @@ public class BookController {
 
     @GetMapping
     public ResponseEntity<List<Book>> getBooks() {
-        List<Book> books = bookService.getAllBooks();
-        System.out.println(books);
+        List<Book> books = bookService.getBooks();
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<Book> borrowBook(@RequestBody Book book) throws BookAlreadyBorrowedByUserException, BookNotFoundException, UserWithPasswordDoesNotExists, BookLimitException {
-        User user = userService.authorizeUser("d_user", "123");
-        user2BookService.checkIfBookDoNotDuplicate(user, book);
+    public ResponseEntity<Book> borrowBook(@RequestBody Book book, Principal principal) throws BookAlreadyBorrowedByUserException,
+            BookLimitException, UserNotFoundException {
+        User user = userService.getUserByLogin(principal.getName());
         Book borrowedBook = bookService.borrowBook(book, user);
-        User2Book u2b = user2BookService.borrowUser4Book(user, borrowedBook);
-        bookService.saveBook(borrowedBook);
-        user2BookService.saveU2B(u2b);
+        User2Book u2b = user2BookService.borrowBookForUser(user, borrowedBook);
         return new ResponseEntity<>(borrowedBook, HttpStatus.OK);
     }
 

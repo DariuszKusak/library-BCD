@@ -1,11 +1,6 @@
 package com.library.bcd.librarybcd.config;
 
-import com.library.bcd.librarybcd.exception.BookAlreadyBorrowedByUserException;
-import com.library.bcd.librarybcd.exception.BookLimitException;
-import com.library.bcd.librarybcd.exception.BookNotFoundException;
-import com.library.bcd.librarybcd.exception.CustomErrorResponse;
-import com.library.bcd.librarybcd.exception.CustomHttpStatus;
-import com.library.bcd.librarybcd.exception.UserWithPasswordDoesNotExists;
+import com.library.bcd.librarybcd.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,7 +13,7 @@ import java.time.LocalDateTime;
 import static com.library.bcd.librarybcd.exception.CustomHttpStatus.BOOK_ALREADY_BORROWED;
 import static com.library.bcd.librarybcd.exception.CustomHttpStatus.BOOK_LIMIT_EXTENDED;
 import static com.library.bcd.librarybcd.exception.CustomHttpStatus.BOOK_NOT_FOUND;
-import static com.library.bcd.librarybcd.exception.CustomHttpStatus.USER_WITH_PASSWORD_NOT_EXISTS;
+import static com.library.bcd.librarybcd.exception.CustomHttpStatus.USER_NOT_FOUND_EXCEPTION;
 
 @ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -35,9 +30,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(customErrorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(UserWithPasswordDoesNotExists.class)
-    public ResponseEntity<CustomErrorResponse> userWithPasswordDoesNotExist(Exception ex, WebRequest request) {
-        CustomErrorResponse customErrorResponse = generateCustomErrorResponse(USER_WITH_PASSWORD_NOT_EXISTS, ex);
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<CustomErrorResponse> userNotFoundException(Exception ex, WebRequest request) {
+        CustomErrorResponse customErrorResponse = generateCustomErrorResponse(USER_NOT_FOUND_EXCEPTION, ex);
         return new ResponseEntity<>(customErrorResponse, HttpStatus.NOT_FOUND);
     }
 

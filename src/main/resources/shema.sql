@@ -11,3 +11,11 @@ CREATE TABLE book (
   year INT,
   amount INT
 );
+
+CREATE TABLE user (
+ id INT AUTO_INCREMENT PRMIARY KEY,
+ login VARCHAR (250),
+ password VARCHAR (250),
+ role VARCHAR (250),
+ book_limit INT
+);

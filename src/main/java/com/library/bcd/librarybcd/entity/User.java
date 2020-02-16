@@ -31,4 +31,7 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "book_limit")
+    private int bookLimit;
+
 }

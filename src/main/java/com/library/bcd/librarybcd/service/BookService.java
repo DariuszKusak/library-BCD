@@ -12,13 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 @Service
 public class BookService {
-
-    private final int BOOKS_LIMIT = 3;
 
     private final BookRepository bookRepository;
     private final User2BookRepository user2BookRepository;
@@ -32,28 +29,18 @@ public class BookService {
         return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
     }
 
-    public List<Book> getAllBooks() {
+    public List<Book> getBooks() {
         return bookRepository.findAll();
     }
 
-    public List<Book> getAvailableBooks() {
-        return bookRepository.findAll()
-                .stream()
-                .filter(book -> book.isAvailable() && book.getAmount() > 0)
-                .collect(Collectors.toList());
-    }
-
     public Book borrowBook(Book book, User user) throws BookAlreadyBorrowedByUserException, BookLimitException {
+        checkIfBookBorrowedAlready(user, book);
         checkIfUserCanBorrowMoreBooks(user);
         checkIfBookIsAvailable(book, user);
         book.setAmount(book.getAmount() - 1);
         if (book.getAmount() < 1) book.setAvailable(false);
         bookRepository.save(book);
         return book;
-    }
-
-    public void saveBook(Book book) {
-        bookRepository.save(book);
     }
 
     private Book checkIfBookIsAvailable(Book book, User user) throws BookAlreadyBorrowedByUserException {
@@ -65,8 +52,15 @@ public class BookService {
 
     private void checkIfUserCanBorrowMoreBooks(User user) throws BookLimitException {
         List<User2Book> user2Books = user2BookRepository.findAllByUser(user);
-        if (user2Books.size() >= BOOKS_LIMIT) {
-            throw new BookLimitException(BOOKS_LIMIT);
+        if (user2Books.size() >= user.getBookLimit()) {
+            throw new BookLimitException(user.getBookLimit());
+        }
+    }
+
+    private void checkIfBookBorrowedAlready(User user, Book book) throws BookAlreadyBorrowedByUserException {
+        List<User2Book> user2Books = user2BookRepository.findAllByUserAndBook(user, book);
+        if (user2Books.size() != 0) {
+            throw new BookAlreadyBorrowedByUserException(book, user);
         }
     }
 

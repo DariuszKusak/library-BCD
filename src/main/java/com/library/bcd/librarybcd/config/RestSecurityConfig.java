@@ -10,14 +10,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableWebSecurity
-public class BasicAuthConfig extends WebSecurityConfigurerAdapter {
+public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("d_user").password("{noop}123").authorities("ROLE_USER")
+                .withUser("d_admin").password("{noop}456").authorities("ROLE_ADMIN")
                 .and()
-                .withUser("d_admin").password("{noop}456").authorities("ROLE_ADMIN");
+                .withUser("d_user").password("{noop}123").authorities("ROLE_USER");
     }
 
     @Override
@@ -25,9 +25,19 @@ public class BasicAuthConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/api/v1/basicAuth/**").permitAll()
-                .antMatchers("/api/v1/basicAuth/**").hasRole("ADMIN")
-                .and().httpBasic();
+                .antMatchers(HttpMethod.OPTIONS, "/api/basicAuth/**").permitAll()
+                .antMatchers("/api/basicAuth/**").hasAnyRole("ADMIN", "USER")
+                .and()
+                .httpBasic();
+
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET,"/api/books").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
+                .and()
+                .addFilter(new JWTAuthorizationFilter(authenticationManager()));
     }
+
 
 }

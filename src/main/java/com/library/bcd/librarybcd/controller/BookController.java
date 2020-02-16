@@ -18,30 +18,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/books")
+@RequestMapping("api/books")
 public class BookController {
 
-    private final User2BookService user2BookService;
     private final UserService userService;
     private final BookService bookService;
+    private final User2BookService user2BookService;
 
     @Autowired
-    public BookController(User2BookService user2BookService, UserService userService, BookService bookService) {
-        this.user2BookService = user2BookService;
+    public BookController(UserService userService, BookService bookService, User2BookService user2BookService) {
         this.userService = userService;
         this.bookService = bookService;
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Book>> getAvailableBooks() {
-        List<Book> availableBooks = bookService.getAvailableBooks();
-        return new ResponseEntity<>(availableBooks, HttpStatus.OK);
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<Book>> getAllBooks() {
-        List<Book> books = bookService.getAllBooks();
-        return new ResponseEntity<>(books, HttpStatus.OK);
+        this.user2BookService = user2BookService;
     }
 
     @GetMapping("/{id}")
@@ -50,10 +38,16 @@ public class BookController {
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
-    @PutMapping("/{bookId}/{login}/{password}")
-    public ResponseEntity<Book> borrowBook(@PathVariable int bookId, @PathVariable String login, @PathVariable String password) throws BookAlreadyBorrowedByUserException, BookNotFoundException, UserWithPasswordDoesNotExists, BookLimitException {
-        User user = userService.authorizeUser(login, password);
-        Book book = bookService.getBookById(bookId);
+    @GetMapping
+    public ResponseEntity<List<Book>> getBooks() {
+        List<Book> books = bookService.getAllBooks();
+        System.out.println(books);
+        return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<Book> borrowBook(@RequestBody Book book) throws BookAlreadyBorrowedByUserException, BookNotFoundException, UserWithPasswordDoesNotExists, BookLimitException {
+        User user = userService.authorizeUser("d_user", "123");
         user2BookService.checkIfBookDoNotDuplicate(user, book);
         Book borrowedBook = bookService.borrowBook(book, user);
         User2Book u2b = user2BookService.borrowUser4Book(user, borrowedBook);
@@ -62,14 +56,14 @@ public class BookController {
         return new ResponseEntity<>(borrowedBook, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Book> addBook() {
-        Book newBook = new Book();
-        newBook.setAmount(500);
-        newBook.setAvailable(true);
-        newBook.setTitle("abc");
-        bookService.saveBook(newBook);
-        return new ResponseEntity<>(newBook, HttpStatus.CREATED);
-    }
+//    @PostMapping
+//    public ResponseEntity<Book> addBook() {
+//        Book newBook = new Book();
+//        newBook.setAmount(500);
+//        newBook.setAvailable(true);
+//        newBook.setTitle("abc");
+//        bookService.saveBook(newBook);
+//        return new ResponseEntity<>(newBook, HttpStatus.CREATED);
+//    }
 
 }

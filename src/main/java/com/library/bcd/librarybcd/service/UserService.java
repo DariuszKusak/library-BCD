@@ -25,6 +25,10 @@ public class UserService {
                 .orElseThrow(() -> new UserWithPasswordDoesNotExists(login, password));
     }
 
+    public User findByLogin(String login) {
+        return userRepository.findByLogin(login).orElseThrow(() -> new RuntimeException("SDFSFD"));
+    }
+
     public List<User> getUsers() {
         return userRepository.findAll();
     }

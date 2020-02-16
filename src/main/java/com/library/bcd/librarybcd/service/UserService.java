@@ -40,4 +40,10 @@ public class UserService {
         return updatedUser;
     }
 
+    public User deleteUser(String login) throws UserNotFoundException {
+        User user = getUserByLogin(login);
+        userRepository.delete(user);
+        return user;
+    }
+
 }

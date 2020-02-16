@@ -10,8 +10,11 @@ import com.library.bcd.librarybcd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.List;
 
@@ -71,6 +74,23 @@ public class UserController {
         Book book = bookService.getBookById(id);
         user2BookService.returnBook(user, book);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{login}")
+    public ResponseEntity<User> deleteUser(@PathVariable String login) throws UserNotFoundException {
+        User user = userService.deleteUser(login);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", null);
+        cookie.setPath("/api");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
 }

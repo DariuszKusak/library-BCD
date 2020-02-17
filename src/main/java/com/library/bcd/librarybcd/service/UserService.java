@@ -26,11 +26,23 @@ public class UserService {
     }
 
     public List<User> getUsers() {
-        return userRepository.findAll().stream().filter(u -> u.getRole().equals("USER")).collect(Collectors.toList());
+        return userRepository.findAll().stream().filter(u -> u.getRole().equals("ROLE_USER")).collect(Collectors.toList());
+    }
+
+    public User createUser(User user) {
+        User newUser = new User();
+        newUser.setId(0);
+        newUser.setLogin(user.getLogin());
+        newUser.setPassword(user.getPassword());
+        newUser.setRole("ROLE_USER");
+        newUser.setBookLimit(user.getBookLimit());
+        userRepository.save(newUser);
+        System.out.println(newUser);
+        return newUser;
     }
 
     public User updateUser(User user) throws UserNotFoundException {
-        User updatedUser = getUserByLogin(user.getLogin());
+        User updatedUser = new User();
         updatedUser.setId(user.getId());
         updatedUser.setLogin(user.getLogin());
         updatedUser.setPassword(user.getPassword());

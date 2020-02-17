@@ -15,9 +15,13 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("d_admin").password("{noop}456").authorities("ROLE_ADMIN")
+                .withUser("user1").password("{noop}u1").authorities("ROLE_USER")
                 .and()
-                .withUser("d_user").password("{noop}123").authorities("ROLE_USER");
+                .withUser("user2").password("{noop}u2").authorities("ROLE_USER")
+                .and()
+                .withUser("admin1").password("{noop}a1").authorities("ROLE_ADMIN")
+                .and()
+                .withUser("admin2").password("{noop}a2").authorities("ROLE_ADMIN");
     }
 
     @Override
@@ -35,6 +39,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET,"/api/books").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN")
                 .and()
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()));
     }

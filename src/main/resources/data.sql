@@ -21,6 +21,7 @@ INSERT INTO book (id, title, author, description, image_url, available, genre, y
  'https://www.ravelo.pl/pub/mm/img/220/100163875.jpg', 1, 'romans', 1889, 8);
 
 INSERT INTO user (id, login, password, role, book_limit) VALUES
-(1, 'd_user', '123', 'USER', 3),
-(2, 'u', 'u', 'USER', 4),
-(3, 'd_admin', '456', 'ADMIN', 0);
+(1, 'user1', '1', 'ROLE_USER', 3),
+(2, 'user2', '2', 'ROLE_USER', 4),
+(3, 'admin1', '1', 'ROLE_ADMIN', 0),
+(4, 'admin2', '2', 'ROLE_ADMIN', 0);

@@ -59,11 +59,18 @@ public class UserController {
         return new ResponseEntity<>(user2Books, HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User newUser = userService.createUser(user);
+        System.out.println(user);
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
+    }
+
     @PutMapping
     public ResponseEntity<User> updateUser(@RequestBody User user) throws UserNotFoundException {
-        User oldUser = userService.getUserByLogin(user.getLogin());
         User updatedUser = userService.updateUser(user);
-        user2BookService.updateUser2Books(oldUser, updatedUser);
+        //user2BookService.updateUser2Books(oldUser, updatedUser);
+        System.out.println(updatedUser);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 

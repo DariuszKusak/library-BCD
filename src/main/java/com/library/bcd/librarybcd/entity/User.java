@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @ToString
 @Getter
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -23,15 +24,31 @@ public class User {
     private int id;
 
     @Column(name = "login")
+    @NotNull
     private String login;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "password")
+    @NotNull
     private String password;
 
-    @Column(name = "role")
-    private String role;
+    @Column(name = "enabled")
+    @NotNull
+    private boolean enabled;
 
     @Column(name = "book_limit")
-    private int bookLimit;
+    private Integer bookLimit;
+
+    @Column(name = "is_admin")
+    @NotNull
+    private boolean isAdmin;
 
 }

@@ -36,16 +36,16 @@ public class BookService {
     public Book borrowBook(Book book, User user) throws BookAlreadyBorrowedByUserException, BookLimitException {
         checkIfBookBorrowedAlready(user, book);
         checkIfUserCanBorrowMoreBooks(user);
-        checkIfBookIsAvailable(book, user);
+        checkIfBookIsAvailable(book);
         book.setAmount(book.getAmount() - 1);
         if (book.getAmount() < 1) book.setAvailable(false);
         bookRepository.save(book);
         return book;
     }
 
-    private Book checkIfBookIsAvailable(Book book, User user) throws BookAlreadyBorrowedByUserException {
+    private Book checkIfBookIsAvailable(Book book) throws BookAlreadyBorrowedByUserException {
         if (book.getAmount() < 1 || !book.isAvailable()) {
-            throw new BookAlreadyBorrowedByUserException(book, user);
+            throw new BookAlreadyBorrowedByUserException(book.getTitle());
         }
         return book;
     }
@@ -60,7 +60,7 @@ public class BookService {
     private void checkIfBookBorrowedAlready(User user, Book book) throws BookAlreadyBorrowedByUserException {
         List<User2Book> user2Books = user2BookRepository.findAllByUserAndBook(user, book);
         if (user2Books.size() != 0) {
-            throw new BookAlreadyBorrowedByUserException(book, user);
+            throw new BookAlreadyBorrowedByUserException(book.getTitle());
         }
     }
 

@@ -26,7 +26,9 @@ public class UserService {
     }
 
     public List<User> getUsers() {
-        return userRepository.findAll().stream().filter(u -> u.getRole().equals("ROLE_USER")).collect(Collectors.toList());
+        return userRepository.findAll().stream()
+                .filter(user -> !user.isAdmin())
+                .collect(Collectors.toList());
     }
 
     public User createUser(User user) {
@@ -34,7 +36,7 @@ public class UserService {
         newUser.setId(0);
         newUser.setLogin(user.getLogin());
         newUser.setPassword(user.getPassword());
-        newUser.setRole("ROLE_USER");
+        //newUser.setRole("ROLE_USER");
         newUser.setBookLimit(user.getBookLimit());
         userRepository.save(newUser);
         System.out.println(newUser);
@@ -46,7 +48,7 @@ public class UserService {
         updatedUser.setId(user.getId());
         updatedUser.setLogin(user.getLogin());
         updatedUser.setPassword(user.getPassword());
-        updatedUser.setRole(user.getRole());
+        //updatedUser.setRole(user.getRole());
         updatedUser.setBookLimit(user.getBookLimit());
         userRepository.saveAndFlush(updatedUser);
         return updatedUser;

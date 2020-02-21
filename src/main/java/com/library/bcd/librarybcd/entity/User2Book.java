@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
@@ -22,10 +23,12 @@ public class User2Book {
 
     @ManyToOne(targetEntity = Book.class)
     @JoinColumn(name = "book_id", nullable = false)
+    @NotNull
     private Book book;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false)
+    @NotNull
     private User user;
 
 }

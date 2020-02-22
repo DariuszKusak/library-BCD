@@ -1,9 +1,12 @@
 package com.library.bcd.librarybcd.service;
 
+import com.library.bcd.librarybcd.entity.AngularUser;
 import com.library.bcd.librarybcd.entity.User;
+import com.library.bcd.librarybcd.exception.LoginAlreadyTakenException;
 import com.library.bcd.librarybcd.exception.UserNotFoundException;
 import com.library.bcd.librarybcd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +16,9 @@ import java.util.stream.Collectors;
 @Transactional
 @Service
 public class UserService {
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private UserRepository userRepository;
 
@@ -31,21 +37,24 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public User createUser(User user) {
+    public User createUser(AngularUser user, String password) throws LoginAlreadyTakenException {
+        checkIfUserLoginAvailable(user.getLogin());
         User newUser = new User();
         newUser.setId(0);
         newUser.setLogin(user.getLogin());
-        newUser.setPassword(user.getPassword());
-        //newUser.setRole("ROLE_USER");
+        newUser.setName(user.getName());
+        newUser.setLastName(user.getLastName());
+        newUser.setPassword(encodePassword(password));
         newUser.setBookLimit(user.getBookLimit());
+        newUser.setAdmin(false);
+        newUser.setEmail(user.getEmail());
+        newUser.setEnabled(true);
         userRepository.save(newUser);
-        System.out.println(newUser);
         return newUser;
     }
 
     public User updateUser(User user) throws UserNotFoundException {
         User updatedUser = new User();
-        updatedUser.setId(user.getId());
         updatedUser.setLogin(user.getLogin());
         updatedUser.setPassword(user.getPassword());
         //updatedUser.setRole(user.getRole());
@@ -58,6 +67,19 @@ public class UserService {
         User user = getUserByLogin(login);
         userRepository.delete(user);
         return user;
+    }
+
+    private String encodePassword(String password) {
+        return bCryptPasswordEncoder.encode(password);
+    }
+
+    private void checkIfUserLoginAvailable(String login) throws LoginAlreadyTakenException {
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            if (user.getLogin().equals(login)) {
+                throw new LoginAlreadyTakenException(login);
+            }
+        }
     }
 
 }

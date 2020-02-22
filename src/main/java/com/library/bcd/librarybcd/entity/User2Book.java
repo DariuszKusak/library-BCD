@@ -19,7 +19,7 @@ public class User2Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int it;
+    private int id;
 
     @ManyToOne(targetEntity = Book.class)
     @JoinColumn(name = "book_id", nullable = false)

@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
@@ -46,9 +47,10 @@ public class BookController {
     }
 
     @PutMapping
-    public ResponseEntity<Book> borrowBook(@RequestBody Book book, Principal principal) throws BookAlreadyBorrowedByUserException,
+    public ResponseEntity<Book> borrowBook(HttpServletRequest request, @RequestBody Book book) throws BookAlreadyBorrowedByUserException,
             BookLimitException, UserNotFoundException {
-        User user = userService.getUserByLogin(principal.getName());
+        System.out.println(request.getUserPrincipal().getName());
+        User user = userService.getUserByLogin(request.getUserPrincipal().getName());
         Book borrowedBook = bookService.borrowBook(book, user);
         User2Book u2b = user2BookService.borrowBookForUser(user, borrowedBook);
         return new ResponseEntity<>(borrowedBook, HttpStatus.OK);

@@ -1,9 +1,12 @@
 package com.library.bcd.librarybcd.controller;
 
+import com.library.bcd.librarybcd.entity.AngularUser;
 import com.library.bcd.librarybcd.entity.Book;
 import com.library.bcd.librarybcd.entity.User;
 import com.library.bcd.librarybcd.exception.BookNotFoundException;
+import com.library.bcd.librarybcd.exception.LoginAlreadyTakenException;
 import com.library.bcd.librarybcd.exception.UserNotFoundException;
+import com.library.bcd.librarybcd.service.AuthorityService;
 import com.library.bcd.librarybcd.service.BookService;
 import com.library.bcd.librarybcd.service.User2BookService;
 import com.library.bcd.librarybcd.service.UserService;
@@ -14,40 +17,47 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.Principal;
 import java.util.List;
+
+import static com.library.bcd.librarybcd.utils.Convert.user2AngularUser;
+import static com.library.bcd.librarybcd.utils.Convert.userList2AngularUserList;
 
 @RestController
 @RequestMapping("api/users")
 public class UserController {
 
     private UserService userService;
+    private AuthorityService authorityService;
     private BookService bookService;
     private User2BookService user2BookService;
 
     @Autowired
-    public UserController(UserService userService, BookService bookService, User2BookService user2BookService) {
+    public UserController(UserService userService, AuthorityService authorityService, BookService bookService,
+                          User2BookService user2BookService) {
         this.userService = userService;
+        this.authorityService = authorityService;
         this.bookService = bookService;
         this.user2BookService = user2BookService;
     }
 
     @GetMapping("/{login}")
-    public ResponseEntity<User> getUserByLogin(@PathVariable String login) throws UserNotFoundException {
+    public ResponseEntity<AngularUser> getUserByLogin(@PathVariable String login) throws UserNotFoundException {
         User user = userService.getUserByLogin(login);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(user2AngularUser(user), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<AngularUser>> getUsers() {
         List<User> users = userService.getUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(userList2AngularUserList(users), HttpStatus.OK);
     }
 
     @GetMapping("/books")
-    public ResponseEntity<List<Book>> getLoggedUserBooks(Principal principal) throws UserNotFoundException {
-        User user = userService.getUserByLogin(principal.getName());
+    public ResponseEntity<List<Book>> getLoggedUserBooks(HttpServletRequest request) throws UserNotFoundException {
+        System.out.println(request.getUserPrincipal().getName());
+        User user = userService.getUserByLogin(request.getUserPrincipal().getName());
         List<Book> user2Books = user2BookService.getBooksForUser(user);
         return new ResponseEntity<>(user2Books, HttpStatus.OK);
     }
@@ -60,9 +70,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User newUser = userService.createUser(user);
-        System.out.println(user);
+    public ResponseEntity<User> createUser(@RequestBody AngularUser user, @RequestHeader("Password") String password) throws LoginAlreadyTakenException {
+        User newUser = userService.createUser(user, password);
+        authorityService.grantRoleToUser(user.getLogin());
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 

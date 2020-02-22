@@ -35,8 +35,10 @@ public class User2BookService {
     }
 
     public User2Book borrowBookForUser(User user, Book book) {
+        System.out.println(user);
+        System.out.println(book);
         User2Book u2b = new User2Book(0, book, user);
-        user2BookRepository.saveAndFlush(u2b);
+        user2BookRepository.save(u2b);
         return u2b;
     }
 

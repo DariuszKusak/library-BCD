@@ -10,10 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 
-import static com.library.bcd.librarybcd.exception.CustomHttpStatus.BOOK_ALREADY_BORROWED;
-import static com.library.bcd.librarybcd.exception.CustomHttpStatus.BOOK_LIMIT_EXTENDED;
-import static com.library.bcd.librarybcd.exception.CustomHttpStatus.BOOK_NOT_FOUND;
-import static com.library.bcd.librarybcd.exception.CustomHttpStatus.USER_NOT_FOUND_EXCEPTION;
+import static com.library.bcd.librarybcd.exception.CustomHttpStatus.*;
 
 @ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -39,6 +36,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(BookLimitException.class)
     public ResponseEntity<CustomErrorResponse> bookLimitExtended(Exception ex, WebRequest request) {
         CustomErrorResponse customErrorResponse = generateCustomErrorResponse(BOOK_LIMIT_EXTENDED, ex);
+        return new ResponseEntity<>(customErrorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(LoginAlreadyTakenException.class)
+    public ResponseEntity<CustomErrorResponse> loginAlreadyTaken(Exception ex) {
+        CustomErrorResponse customErrorResponse = generateCustomErrorResponse(LOGIN_ALREADY_TAKEN, ex);
         return new ResponseEntity<>(customErrorResponse, HttpStatus.BAD_REQUEST);
     }
 

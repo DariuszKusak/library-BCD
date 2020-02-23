@@ -1,4 +1,22 @@
-INSERT INTO book (id, title, author, description, image_url, available, genre, year, amount) VALUES
+INSERT INTO library.users (id, login, name, last_name, email, password, enabled, book_limit, is_admin)
+  values
+  (1, 'dmarchewka', 'Darek', 'Marchewka', 'darek.marchewka@gmail.com', '$2a$10$SXfCWr/409xTSEkA.XJBLeRxK3LCAteqOABYMLcUstCw2Vhi4LKi2', 1, 3, 0),
+  (2, 'jpapryka', 'Jarek', 'Papryka', 'jarek.papryka@gmail.com', '$2a$10$wx/GDECvs9Zk46dod78tjeBYTwojS7PWUC.jIIW5va2exy4mkIcx.', 1, 1, 0),
+  (3, 'gcebula', 'Grzegorz', 'Cebula', 'grzegorz.cebula@gmail.comusersusers', '$2a$10$Ul6Tczd0VWNLDiGj8.gzs./jGBFdRzgVofk73s8a1NCL/gGC5dwG6', 1, 5, 0),
+  (4, 'admin1', null, null, null, '$2a$10$uwyS.KyGwK6Nr2hLjomem.L7WObPUsMB9zr3ea7GgDoa4JHpoQ.lK', 1, null, 1),
+  (5, 'admin2', null, null, null, '$2a$10$i1LchzJfmaZhna6eYNYeNu.COpeY5dnRY5vPxQtiyaD1ikJduRrUG', 1, null, 1),
+  (6, 'admin3', null, null, null, '$2a$10$j2ZPAIzbRl2Ak/n8/4FVPOB/OxGFq00Ztf5e1464k6nRPOyBkDYZW', 1, null, 1);
+
+  INSERT INTO library.authorities (id, login, authority)
+  values
+  (1, 'dmarchewka', 'ROLE_USER'),
+  (2, 'jpapryka', 'ROLE_USER'),
+  (3, 'gcebula', 'ROLE_USER'),
+  (4, 'admin1', 'ROLE_ADMIN'),
+  (5, 'admin2', 'ROLE_ADMIN'),
+  (6, 'admin3', 'ROLE_ADMIN');
+
+  INSERT INTO library.books (id, title, author, description, image_url, available, genre, year, amount) VALUES
 (1, 'Nekrosytuacje: Perełki z życia grabarza', 'Bailly Guillaume', 'A może tak rzucić wszystko i zostać grabarzem? Obcując na co dzień ze śmiercią, oswoić ją i uodpornić się na jej powagę, kosząc przy tym niezły hajs? Tak trzeba żyć!Podczas czytania tej książki przypominamy sobie najlepsze momenty z kultowego serialu "Sześć stóp pod ziemią". Lektura "Nekrosytuacji" wywołuje lekki dreszczyk, ożywczy śmiech i szczyptę kontemplacji. Wszystko w idealnych proporcjach, jak starannie skomponowane menu na stypie.',
  'https://www.ravelo.pl/pub/mm/img/220/100796547.jpg', 1, 'popularno-naukowa', 2019, 1),
 (2, 'Tajemniczy przeciwnik', 'Christie Agatha', 'Mija kilka lat, ludzie usiłują się odnaleźć w powojennej rzeczywistości. Wśród nich są przyjaciele z dzieciństwa - zdemobilizowany Tommy Beresford i Prudence „Tuppence” Cowley, córka archidiakona. Ci dwoje wpadają na siebie przypadkiem. Wobec fatalnej sytuacji finansowej postanawiają założyć spółkę o szumnej nazwie Młodzi Łowcy Przygód i realizować zadania specjalne. Właściwie od razu otrzymują pierwsze zlecenie. Zostają zaangażowani przez brytyjski wywiad – muszą odnaleźć Jane Finn i powierzone jej dokumenty. Trzeba je zdobyć – inaczej ład Wielkiej Brytanii (a może i całego świata) będzie zagrożony. Gdyby treść dostała się do wiadomości publicznej, rząd byłby skompromitowany, a władzę na drodze przewrotu prawdopodobnie przejęliby komuniści. Młodzi Łowcy Przygód podejmują się wykonania zlecenia – będzie się działo! Porwania, pościgi, strzelaniny, zagadki, przebieranki…',
@@ -19,9 +37,3 @@ INSERT INTO book (id, title, author, description, image_url, available, genre, y
 'https://www.ravelo.pl/pub/mm/img/220/100492966.jpg', 1, 'naukowa', 2013, 4),
 (10, 'Anna Karenina', 'Tołstoj Lew', 'Trudno pisać recenzję książki, która należy do klasyki światowej literatury i została uznana za arcydzieło, a fakt, że nie jestem wielkim znawcą XIX-wiecznej rosyjskiej prozy, odrobinę onieśmiela przy formułowaniu opinii i ocen, zwłaszcza tych krytycznych. Czuję jednak potrzebę, aby podzielić się moimi wrażeniami po przeczytaniu powieści. Wrażeniami, które w żadnym stopniu nie będą się opierać na dokonywanych przez dziesiątki lat analizach, krytykach, interpretacjach. Będzie to czysto subiektywna opinia człowieka, który lubi czytać.',
  'https://www.ravelo.pl/pub/mm/img/220/100163875.jpg', 1, 'romans', 1889, 8);
-
-INSERT INTO user (id, login, password, role, book_limit) VALUES
-(1, 'user1', '1', 'ROLE_USER', 3),
-(2, 'user2', '2', 'ROLE_USER', 4),
-(3, 'admin1', '1', 'ROLE_ADMIN', 0),
-(4, 'admin2', '2', 'ROLE_ADMIN', 0);

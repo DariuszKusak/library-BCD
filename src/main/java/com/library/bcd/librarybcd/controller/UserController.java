@@ -77,11 +77,21 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody User user) throws UserNotFoundException {
+    public ResponseEntity<User> updateUser(@RequestBody AngularUser user) throws UserNotFoundException {
         User updatedUser = userService.updateUser(user);
-        //user2BookService.updateUser2Books(oldUser, updatedUser);
-        System.out.println(updatedUser);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    @PutMapping("/disable/{login}")
+    public ResponseEntity<User> blockUser(@PathVariable String login) throws UserNotFoundException {
+        User blockedUser = userService.setEnableStatus(login, false);
+        return new ResponseEntity<>(blockedUser, HttpStatus.OK);
+    }
+
+    @PutMapping("/enable/{login}")
+    public ResponseEntity<User> unBlockUser(@PathVariable String login) throws UserNotFoundException {
+        User blockedUser = userService.setEnableStatus(login, true);
+        return new ResponseEntity<>(blockedUser, HttpStatus.OK);
     }
 
     @DeleteMapping("/{login}/book/{id}")
@@ -95,6 +105,8 @@ public class UserController {
 
     @DeleteMapping("/delete/{login}")
     public ResponseEntity<User> deleteUser(@PathVariable String login) throws UserNotFoundException {
+        user2BookService.returnUserBooks(login);
+        authorityService.revokeRoleFromUser(login);
         User user = userService.deleteUser(login);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

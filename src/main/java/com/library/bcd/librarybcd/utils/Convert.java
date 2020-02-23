@@ -16,6 +16,7 @@ public class Convert {
         angularUser.setLastName(user.getLastName());
         angularUser.setEmail(user.getEmail());
         angularUser.setBookLimit(user.getBookLimit());
+        angularUser.setEnabled(user.isEnabled());
         angularUser.setAdmin(user.isAdmin());
         return angularUser;
     }

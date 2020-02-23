@@ -3,10 +3,7 @@ package com.library.bcd.librarybcd.controller;
 import com.library.bcd.librarybcd.entity.Book;
 import com.library.bcd.librarybcd.entity.User;
 import com.library.bcd.librarybcd.entity.User2Book;
-import com.library.bcd.librarybcd.exception.BookAlreadyBorrowedByUserException;
-import com.library.bcd.librarybcd.exception.BookLimitException;
-import com.library.bcd.librarybcd.exception.BookNotFoundException;
-import com.library.bcd.librarybcd.exception.UserNotFoundException;
+import com.library.bcd.librarybcd.exception.*;
 import com.library.bcd.librarybcd.service.BookService;
 import com.library.bcd.librarybcd.service.User2BookService;
 import com.library.bcd.librarybcd.service.UserService;
@@ -56,14 +53,10 @@ public class BookController {
         return new ResponseEntity<>(borrowedBook, HttpStatus.OK);
     }
 
-//    @PostMapping
-//    public ResponseEntity<Book> addBook() {
-//        Book newBook = new Book();
-//        newBook.setAmount(500);
-//        newBook.setAvailable(true);
-//        newBook.setTitle("abc");
-//        bookService.saveBook(newBook);
-//        return new ResponseEntity<>(newBook, HttpStatus.CREATED);
-//    }
+    @PostMapping
+    public ResponseEntity<Book> addBook(@RequestBody Book book) throws BookAlreadyExists {
+        Book newBook = bookService.addBook(book);
+        return new ResponseEntity<>(newBook, HttpStatus.CREATED);
+    }
 
 }

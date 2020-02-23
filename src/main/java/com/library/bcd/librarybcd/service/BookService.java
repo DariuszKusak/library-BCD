@@ -4,6 +4,7 @@ import com.library.bcd.librarybcd.entity.Book;
 import com.library.bcd.librarybcd.entity.User;
 import com.library.bcd.librarybcd.entity.User2Book;
 import com.library.bcd.librarybcd.exception.BookAlreadyBorrowedByUserException;
+import com.library.bcd.librarybcd.exception.BookAlreadyExists;
 import com.library.bcd.librarybcd.exception.BookLimitException;
 import com.library.bcd.librarybcd.exception.BookNotFoundException;
 import com.library.bcd.librarybcd.repository.BookRepository;
@@ -43,6 +44,13 @@ public class BookService {
         return book;
     }
 
+    public Book addBook(Book book) throws BookAlreadyExists {
+        checkIfBookExistAlready(book);
+        book.setId(0);
+        bookRepository.save(book);
+        return book;
+    }
+
     private Book checkIfBookIsAvailable(Book book) throws BookAlreadyBorrowedByUserException {
         if (book.getAmount() < 1 || !book.isAvailable()) {
             throw new BookAlreadyBorrowedByUserException(book.getTitle());
@@ -61,6 +69,16 @@ public class BookService {
         List<User2Book> user2Books = user2BookRepository.findAllByUserAndBook(user, book);
         if (user2Books.size() != 0) {
             throw new BookAlreadyBorrowedByUserException(book.getTitle());
+        }
+    }
+
+    private void checkIfBookExistAlready(Book book) throws BookAlreadyExists {
+        List<Book> books = bookRepository.findAll();
+        for (Book iBook : books) {
+            if (iBook.getTitle().equals(book.getTitle()) && iBook.getAuthor().equals(book.getAuthor()) &&
+                    iBook.getYear().equals(book.getYear()) ) {
+                throw new BookAlreadyExists(book);
+            }
         }
     }
 

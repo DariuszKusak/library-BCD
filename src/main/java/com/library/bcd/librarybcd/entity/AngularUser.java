@@ -1,10 +1,8 @@
 package com.library.bcd.librarybcd.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,6 +15,7 @@ public class AngularUser {
     private String lastName;
     private String email;
     private Integer bookLimit;
+    private boolean enabled;
     private boolean isAdmin;
 
 }

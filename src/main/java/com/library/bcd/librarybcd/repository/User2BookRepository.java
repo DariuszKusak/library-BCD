@@ -15,6 +15,6 @@ public interface User2BookRepository extends JpaRepository<User2Book, Integer> {
 
     List<User2Book> findAllByUserAndBook(User user, Book book);
 
-   void deleteByUserAndBook (User user, Book book);
+    void deleteByUserAndBook(User user, Book book);
 
 }

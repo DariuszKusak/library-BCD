@@ -38,9 +38,9 @@ public class Book {
     private String genre;
 
     @Column(name = "year")
-    private int year;
+    private Integer year;
 
     @Column(name = "amount")
-    private int amount;
+    private Integer amount;
 
 }

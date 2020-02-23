@@ -53,12 +53,12 @@ public class UserService {
         return newUser;
     }
 
-    public User updateUser(User user) throws UserNotFoundException {
-        User updatedUser = new User();
-        updatedUser.setLogin(user.getLogin());
-        updatedUser.setPassword(user.getPassword());
-        //updatedUser.setRole(user.getRole());
-        updatedUser.setBookLimit(user.getBookLimit());
+    public User updateUser(AngularUser angularUser) throws UserNotFoundException {
+        User updatedUser = getUserByLogin(angularUser.getLogin());
+        updatedUser.setName(angularUser.getName());
+        updatedUser.setLastName(angularUser.getLastName());
+        updatedUser.setEmail(angularUser.getEmail());
+        updatedUser.setBookLimit(angularUser.getBookLimit());
         userRepository.saveAndFlush(updatedUser);
         return updatedUser;
     }
@@ -66,6 +66,13 @@ public class UserService {
     public User deleteUser(String login) throws UserNotFoundException {
         User user = getUserByLogin(login);
         userRepository.delete(user);
+        return user;
+    }
+
+    public User setEnableStatus(String login, boolean enabled) throws UserNotFoundException {
+        User user = getUserByLogin(login);
+        user.setEnabled(enabled);
+        userRepository.saveAndFlush(user);
         return user;
     }
 

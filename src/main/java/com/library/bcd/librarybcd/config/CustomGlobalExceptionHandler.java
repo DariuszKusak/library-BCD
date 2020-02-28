@@ -1,7 +1,6 @@
 package com.library.bcd.librarybcd.config;
 
 import com.library.bcd.librarybcd.exception.*;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -49,6 +48,12 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(BookAlreadyExists.class)
     public ResponseEntity<CustomErrorResponse> bookAlreadyExists(Exception ex) {
         CustomErrorResponse customErrorResponse = generateCustomErrorResponse(BOOK_ALREADY_EXISTS, ex);
+        return new ResponseEntity<>(customErrorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MailNotSentException.class)
+    public ResponseEntity<CustomErrorResponse> couldNotSendMail(Exception ex) {
+        CustomErrorResponse customErrorResponse = generateCustomErrorResponse(COULD_NOT_SEND_MAIL, ex);
         return new ResponseEntity<>(customErrorResponse, HttpStatus.BAD_REQUEST);
     }
 

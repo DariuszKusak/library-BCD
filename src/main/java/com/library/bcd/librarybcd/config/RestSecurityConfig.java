@@ -50,6 +50,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/books").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/mail/**").hasAnyRole("USER", "ADMIN")
                 .and()
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()));
     }

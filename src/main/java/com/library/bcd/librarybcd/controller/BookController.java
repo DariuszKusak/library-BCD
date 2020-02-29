@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -46,17 +45,30 @@ public class BookController {
     @PutMapping
     public ResponseEntity<Book> borrowBook(HttpServletRequest request, @RequestBody Book book) throws BookAlreadyBorrowedByUserException,
             BookLimitException, UserNotFoundException {
-        System.out.println(request.getUserPrincipal().getName());
         User user = userService.getUserByLogin(request.getUserPrincipal().getName());
         Book borrowedBook = bookService.borrowBook(book, user);
         User2Book u2b = user2BookService.borrowBookForUser(user, borrowedBook);
         return new ResponseEntity<>(borrowedBook, HttpStatus.OK);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<Book> updateBook(@RequestBody Book book) throws BookNotFoundException {
+        bookService.updateBook(book);
+        return new ResponseEntity<>(book, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Book> addBook(@RequestBody Book book) throws BookAlreadyExists {
         Book newBook = bookService.addBook(book);
         return new ResponseEntity<>(newBook, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Book> deleteBook(@PathVariable int id) throws BookNotFoundException {
+        Book book = bookService.getBookById(id);
+        user2BookService.returnBooks(book);
+        bookService.deleteBook(book);
+        return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
 }

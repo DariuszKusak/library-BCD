@@ -15,4 +15,5 @@ public class CustomErrorResponse {
     private LocalDateTime timeStamp;
     private int status;
     private String error;
+
 }

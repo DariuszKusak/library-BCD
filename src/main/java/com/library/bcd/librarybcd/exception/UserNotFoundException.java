@@ -7,4 +7,6 @@ public class UserNotFoundException extends Exception {
     public UserNotFoundException(String login) {
         super(String.format("User by login: %s not found.", login));
     }
+
+
 }

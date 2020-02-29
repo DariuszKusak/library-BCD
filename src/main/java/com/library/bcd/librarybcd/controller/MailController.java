@@ -25,4 +25,5 @@ public class MailController {
         mailService.send(mail);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

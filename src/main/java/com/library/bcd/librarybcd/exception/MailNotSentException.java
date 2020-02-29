@@ -9,4 +9,6 @@ public class MailNotSentException extends Exception {
     public MailNotSentException(Mail mail) {
         super(String.format("Błąd wysyłki wiadomości %s na adres %s", mail.getSubject(), mail.getTo()));
     }
+
+
 }

@@ -59,4 +59,8 @@ public class User2BookService {
         }
     }
 
+    public void returnBooks(Book book) {
+        user2BookRepository.deleteByBook(book);
+    }
+
 }

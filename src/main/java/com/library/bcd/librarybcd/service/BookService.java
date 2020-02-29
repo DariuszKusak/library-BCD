@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Service
@@ -49,6 +50,22 @@ public class BookService {
         book.setId(0);
         bookRepository.save(book);
         return book;
+    }
+
+    public void updateBook(Book book) throws BookNotFoundException {
+        Book updatedBook = bookRepository.findById(book.getId()).orElseThrow(() -> new BookNotFoundException(book.getId()));
+        updatedBook.setTitle(book.getTitle());
+        updatedBook.setAuthor(book.getAuthor());
+        updatedBook.setDescription(book.getDescription());
+        updatedBook.setAmount(book.getAmount());
+        updatedBook.setGenre(book.getGenre());
+        updatedBook.setImageUrl(book.getImageUrl());
+        updatedBook.setYear(book.getYear());
+        bookRepository.saveAndFlush(updatedBook);
+    }
+
+    public void deleteBook(Book book) {
+        bookRepository.delete(book);
     }
 
     private Book checkIfBookIsAvailable(Book book) throws BookAlreadyBorrowedByUserException {

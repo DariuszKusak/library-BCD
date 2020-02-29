@@ -7,4 +7,6 @@ public class LoginAlreadyTakenException extends Exception {
     public LoginAlreadyTakenException(String login) {
         super(String.format("Użytkownik o loginie %s już istnieje", login));
     }
+
+
 }

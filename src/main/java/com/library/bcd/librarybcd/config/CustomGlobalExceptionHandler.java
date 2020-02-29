@@ -16,25 +16,25 @@ import static com.library.bcd.librarybcd.exception.CustomHttpStatus.*;
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BookAlreadyBorrowedByUserException.class)
-    public ResponseEntity<CustomErrorResponse> bookAlreadyBorrowed(Exception ex, WebRequest request) {
+    public ResponseEntity<CustomErrorResponse> bookAlreadyBorrowed(Exception ex) {
         CustomErrorResponse customErrorResponse = generateCustomErrorResponse(BOOK_ALREADY_BORROWED, ex);
         return new ResponseEntity<>(customErrorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BookNotFoundException.class)
-    public ResponseEntity<CustomErrorResponse> bookNotFound(Exception ex, WebRequest request) {
+    public ResponseEntity<CustomErrorResponse> bookNotFound(Exception ex) {
         CustomErrorResponse customErrorResponse = generateCustomErrorResponse(BOOK_NOT_FOUND, ex);
         return new ResponseEntity<>(customErrorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<CustomErrorResponse> userNotFoundException(Exception ex, WebRequest request) {
+    public ResponseEntity<CustomErrorResponse> userNotFoundException(Exception ex) {
         CustomErrorResponse customErrorResponse = generateCustomErrorResponse(USER_NOT_FOUND_EXCEPTION, ex);
         return new ResponseEntity<>(customErrorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(BookLimitException.class)
-    public ResponseEntity<CustomErrorResponse> bookLimitExtended(Exception ex, WebRequest request) {
+    public ResponseEntity<CustomErrorResponse> bookLimitExtended(Exception ex) {
         CustomErrorResponse customErrorResponse = generateCustomErrorResponse(BOOK_LIMIT_EXTENDED, ex);
         return new ResponseEntity<>(customErrorResponse, HttpStatus.BAD_REQUEST);
     }

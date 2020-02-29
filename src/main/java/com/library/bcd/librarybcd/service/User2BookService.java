@@ -30,12 +30,7 @@ public class User2BookService {
     }
 
     public List<Book> getBooksForUser(User user) {
-        List<User2Book> user2Books = user2BookRepository.findAllByUser(user);
-        List<Book> books = new ArrayList<>();
-        for (User2Book u2b : user2Books) {
-            books.add(u2b.getBook());
-        }
-        return books;
+        return  bookRepository.findBooksForUser(user);
     }
 
     public User2Book borrowBookForUser(User user, Book book) {
@@ -53,10 +48,7 @@ public class User2BookService {
 
     public void returnUserBooks(String login) {
         User user = userRepository.findByLogin(login).orElseThrow(() -> new UsernameNotFoundException(login));
-        List<User2Book> userBooks = user2BookRepository.findAllByUser(user);
-        for (User2Book u2b : userBooks) {
-            user2BookRepository.delete(u2b);
-        }
+        user2BookRepository.deleteAllByUser(user);
     }
 
     public void returnBooks(Book book) {

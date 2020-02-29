@@ -41,6 +41,8 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/api/basicAuth/**").permitAll()
                 .antMatchers("/api/basicAuth/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/api/mail/**").permitAll()
+                .antMatchers("/api/accounts/**").permitAll()
                 .and()
                 .httpBasic();
 
@@ -50,7 +52,6 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/books").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/mail/**").hasAnyRole("USER", "ADMIN")
                 .and()
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()));
     }

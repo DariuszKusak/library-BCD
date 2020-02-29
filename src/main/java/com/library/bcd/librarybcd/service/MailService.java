@@ -27,7 +27,7 @@ public class MailService {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mime, true);
             helper.setTo(mail.getTo());
-            helper.setReplyTo(mail.getFrom());
+            helper.setReplyTo(mail.getReplyTo());
             helper.setFrom(mail.getFrom());
             helper.setSubject(mail.getSubject());
             helper.setText(mail.getContent());

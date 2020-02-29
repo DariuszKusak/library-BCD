@@ -1,15 +1,17 @@
 package com.library.bcd.librarybcd.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Getter
+
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@Getter
+@Setter
 public class Mail {
     private String from;
     private String to;
+    private String replyTo;
     private String subject;
     private String content;
 }

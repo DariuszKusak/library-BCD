@@ -16,13 +16,11 @@ import java.util.stream.Collectors;
 @Transactional
 @Service
 public class UserService {
-
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private UserRepository userRepository;
 
-    @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -88,5 +86,6 @@ public class UserService {
             }
         }
     }
+
 
 }

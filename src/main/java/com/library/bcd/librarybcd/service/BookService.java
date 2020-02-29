@@ -13,12 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @Service
 public class BookService {
-
     private final BookRepository bookRepository;
     private final User2BookRepository user2BookRepository;
 
@@ -93,10 +91,11 @@ public class BookService {
         List<Book> books = bookRepository.findAll();
         for (Book iBook : books) {
             if (iBook.getTitle().equals(book.getTitle()) && iBook.getAuthor().equals(book.getAuthor()) &&
-                    iBook.getYear().equals(book.getYear()) ) {
+                    iBook.getYear().equals(book.getYear())) {
                 throw new BookAlreadyExists(book);
             }
         }
     }
+
 
 }

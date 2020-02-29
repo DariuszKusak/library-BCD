@@ -17,7 +17,6 @@ import java.util.Date;
 
 @Service
 public class JWTService {
-
     private RSAPrivateKey privateKey;
     private RSAPublicKey publicKey;
     private long expirationTime = 1800000;
@@ -46,5 +45,6 @@ public class JWTService {
                 .getPayload();
         return new String(Base64.getDecoder().decode(encodedPayload));
     }
+
 
 }

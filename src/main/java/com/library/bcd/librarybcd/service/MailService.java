@@ -13,7 +13,6 @@ import javax.mail.internet.MimeMessage;
 @Service
 @Transactional
 public class MailService {
-
     private JavaMailSender javaMailSender;
 
     public MailService(JavaMailSender javaMailSender) {

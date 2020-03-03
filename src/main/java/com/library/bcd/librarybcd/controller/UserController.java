@@ -81,13 +81,13 @@ public class UserController {
 
     @PutMapping("/disable/{login}")
     public ResponseEntity<User> blockUser(@PathVariable String login) throws UserNotFoundException {
-        User blockedUser = userService.setEnableStatus(login, false);
+        User blockedUser = userService.setStatus(login, false);
         return new ResponseEntity<>(blockedUser, HttpStatus.OK);
     }
 
     @PutMapping("/enable/{login}")
     public ResponseEntity<User> unBlockUser(@PathVariable String login) throws UserNotFoundException {
-        User blockedUser = userService.setEnableStatus(login, true);
+        User blockedUser = userService.setStatus(login, true);
         return new ResponseEntity<>(blockedUser, HttpStatus.OK);
     }
 

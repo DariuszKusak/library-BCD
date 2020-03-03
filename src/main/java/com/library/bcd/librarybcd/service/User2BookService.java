@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
@@ -30,7 +29,7 @@ public class User2BookService {
     }
 
     public List<Book> getBooksForUser(User user) {
-        return  bookRepository.findBooksForUser(user);
+        return bookRepository.findBooksForUser(user);
     }
 
     public User2Book borrowBookForUser(User user, Book book) {

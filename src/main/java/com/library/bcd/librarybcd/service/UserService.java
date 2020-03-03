@@ -67,7 +67,7 @@ public class UserService {
         return user;
     }
 
-    public User setEnableStatus(String login, boolean enabled) throws UserNotFoundException {
+    public User setStatus(String login, boolean enabled) throws UserNotFoundException {
         User user = getUserByLogin(login);
         user.setEnabled(enabled);
         userRepository.saveAndFlush(user);
